@@ -1,4 +1,4 @@
-_***API*** - The core service used to handle REST and WS events _
+_***API*** - The core service used to handle REST and WS events_
 
 ## Docs
 * [Info](#info)
