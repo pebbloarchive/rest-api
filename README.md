@@ -8,7 +8,7 @@ _***API*** - The core service used to handle REST and WS events_
     * [First time setup](#first-time-setup)
         * [Installation](#installation)
         * [Background services](#background-services)
-        * [Starting @risuto/api](#starting-@risuto/api)
+        * [Starting @risuto/api](#starting-risutoapi)
 
 ## Info
 `@risuto/api` is the core service used to handle requests from clients over REST and WebSocket.
