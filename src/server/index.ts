@@ -7,6 +7,7 @@ import routes from './routes'
 const app = express()
 const server = createServer(app)
 
+// connect to DB
 routes(app)
 
 export default server;
