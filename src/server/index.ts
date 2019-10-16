@@ -9,5 +9,6 @@ const server = createServer(app)
 
 // connect to DB
 routes(app)
+// connect to WS server
 
 export default server;
