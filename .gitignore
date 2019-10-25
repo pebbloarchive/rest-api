@@ -42,5 +42,5 @@ typings/
 .env
 .env.test
 
-# Compiled JS
-dist
+# Old files
+ts
