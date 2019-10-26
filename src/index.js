@@ -15,8 +15,6 @@ createServer(app);
 app.use(morgan('combine'));
 app.use(bodyParser.json());
 
-app.use('/assets', express.static(path.join(__dirname, '../client')));
-
 app.use(session({
     secret: process.env.SITE_SECRET,
     resave: true,

@@ -1,8 +1,6 @@
 const express = require('express');
 
 const bcrypt = require('bcrypt');
-const User = require('../schemas/user.schema');
-const ID = require('../services/log.utils');
 
 const app = express();
 
