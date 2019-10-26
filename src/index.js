@@ -15,6 +15,8 @@ createServer(app);
 app.use(morgan('combine'));
 app.use(bodyParser.json());
 
+app.use('/assets', express.static(path.join(__dirname, '../client')));
+
 app.use(session({
     secret: process.env.SITE_SECRET,
     resave: true,
@@ -28,6 +30,15 @@ database.connect();
 // Importing models
 global.database.users = database.databaseConnection.import('./schemas/user.schema');
 global.database.profiles = database.databaseConnection.import('./schemas/profile.schema');
+global.snowflake = (d) => {
+  let date = new Date();
+  let unique = ((Math.random() *1000) +"").slice(-4)
+
+  date = date.toISOString().replace(/[^0-9]/g, "").replace(date.getFullYear(),unique);
+  if(d==date)
+      date = UniqueValue(date);
+  return date;
+}
 
 routes(app);
 

@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     return sequelize.define('profiles', {
         id: {
             primaryKey: true,
-            type: DataTypes.STRING,
+			type: DataTypes.STRING,
 		},
 		wallpaper: {
 			type: DataTypes.STRING,
