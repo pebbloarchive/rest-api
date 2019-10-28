@@ -35,36 +35,36 @@ app.post('/auth/register', async (req, res, next) => {
             emailExpiresAt: now
         }).then(user => {
             if(user) {
-                // send email to the user.
-                // const request = sendgrid.emptyRequest({
-                //     method: 'POST',
-                //     path: '/v3/mail/send',
-                //     body: {
-                //       personalizations: [
-                //         {
-                //           to: [
-                //             {
-                //               email: req.body.email
-                //             }
-                //           ],
-                //           subject: 'pebblo.org email verification'
-                //         }
-                //       ],
-                //       from: {
-                //         email: 'no-reply@pebblo.org'
-                //       },
-                //       content: [
-                //         {
-                //           type: 'text/plain',
-                //           value: `Go to https://pebblo.org/auth/email/verify/${tokenString} to verify your email`
-                //         }
-                //       ]
-                //     }
-                // });
-                // // send the email request
-                // sendgrid.API(request).then(() => {
-                //     // return res.json({ message: 'User has been sent a email verification.' });
-                // }).catch(error => res.json({ error: error }));
+                send email to the user.
+                const request = sendgrid.emptyRequest({
+                    method: 'POST',
+                    path: '/v3/mail/send',
+                    body: {
+                      personalizations: [
+                        {
+                          to: [
+                            {
+                              email: req.body.email
+                            }
+                          ],
+                          subject: 'pebblo.org email verification'
+                        }
+                      ],
+                      from: {
+                        email: 'no-reply@pebblo.org'
+                      },
+                      content: [
+                        {
+                          type: 'text/plain',
+                          value: `Go to https://pebblo.org/auth/email/verify/${tokenString} to verify your email`
+                        }
+                      ]
+                    }
+                });
+                // send the email request
+                sendgrid.API(request).then(() => {
+                    // return res.json({ message: 'User has been sent a email verification.' });
+                }).catch(error => res.json({ error: error }));
                 return res.json({ message: `User sucessfully created, they have also been sent an email verification.` });
             } else {
                 return res.json({ error: 'error lol' });
