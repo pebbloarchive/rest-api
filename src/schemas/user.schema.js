@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('users', {
         id: {
@@ -37,6 +36,19 @@ module.exports = (sequelize, DataTypes) => {
         verifiedEmail: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
+        },
+        emailToken: {
+            type: DataTypes.STRING,
+            defaultValue: '',
+        },
+        emailCreatedAt: {
+            type: DataTypes.DATE,
+        },
+        emailExpiresAt: {
+            type: DataTypes.DATE,
+        },
+        emailExpired: {
+            type: DataTypes.BOOLEAN
         },
         createdAt: {
             type: DataTypes.DATE,

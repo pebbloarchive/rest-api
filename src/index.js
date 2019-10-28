@@ -12,7 +12,10 @@ const Database = require('./database');
 const app = express();
 createServer(app);
 
-app.use(morgan('combine'));
+if(process.env.NODE_ENV.toUpperCase() === "DEV") {
+  app.use(morgan('combine'));
+}
+
 app.use(bodyParser.json());
 
 app.use(session({
@@ -25,6 +28,7 @@ app.use(session({
 global.database = new Database(this);
 // Connecting to the database
 database.connect();
+// database.sync();
 // Importing models
 global.database.users = database.databaseConnection.import('./schemas/user.schema');
 global.database.profiles = database.databaseConnection.import('./schemas/profile.schema');
