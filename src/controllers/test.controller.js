@@ -35,7 +35,7 @@ app.post('/auth/register', async (req, res, next) => {
             emailExpiresAt: now
         }).then(user => {
             if(user) {
-                send email to the user.
+                // send email to the user.
                 const request = sendgrid.emptyRequest({
                     method: 'POST',
                     path: '/v3/mail/send',
