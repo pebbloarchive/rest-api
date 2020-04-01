@@ -1,13 +1,15 @@
-const sequelize = require('sequelize');
+import { Sequelize } from 'sequelize';
+import Logger from '../util/Logger';
 
-module.exports = class Database {
+interface Database {
+    databaseConnection: Sequelize;
+    logger: Logger;
+}
+
+class Database {
     constructor() {
-        this.databaseConnection = new sequelize({
-            host: process.env.POSTGRE_HOST || '40.117.115.62',
-            port: process.env.POSTGRE_PORT || '5432',
-            username: process.env.POSTGRE_USER ,
-            password: process.env.POSTGRE_PASS,
-            database: process.env.POSTGRE_NAME || 'risuto_data',
+        this.databaseConnection = new Sequelize(process.env.db_name as string, process.env.db_user as string, process.env.db_pass as string, {
+            host: process.env.db_host as string,
             dialect: 'postgres',
             logging: false,
             define: {
@@ -22,21 +24,22 @@ module.exports = class Database {
             await this.databaseConnection.authenticate();
             return console.log('Successfully connected to database.');
         } catch (error) {
-            return console.error(`Unable to connect to database : ${error}`);
+            return console.log(`Unable to connect to database : ${error}`);
         }
     }
 
-
    async destroy() {
         await this.databaseConnection.close();
-        return console.error('Closed connection to database.')
+        return console.log('Closed connection to database.')
     }
 
     async sync() {
         await this.databaseConnection.authenticate().then(() => {
-            return this.databaseConnection.sync({ force: true })
+            return this.databaseConnection.sync({ alter: true })
         });
         return console.log('Synced the database.')
     }
     
 };
+
+export default Database;

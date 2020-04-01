@@ -1,6 +1,19 @@
-FROM node:lts-buster
-WORKDIR /app
-COPY package.json ./app
+FROM node
+
+WORKDIR /usr/app
+
+COPY package*.json./
+
 RUN npm install
-COPY . /app
-CMD ["npm", "start"]
+
+COPY . .
+
+COPY .env ./build/
+
+WORKDIR ./build
+
+EXPOSE 3000
+
+CMD node app.js
+
+# CMD ["npm", "start"]
