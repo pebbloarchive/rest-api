@@ -5,6 +5,7 @@ import routes from './routes';
 import session from 'express-session';
 import { resolve } from "path"
 import { config } from "dotenv"
+import cors from 'cors'
 config({ path: resolve(__dirname, '../.env') });
 
 const _config = require('../config.json');
@@ -13,11 +14,17 @@ const server = createServer(app);
 
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+    console.log('Bodyyyyyyyy!', req.body) // populated!
+    next();
+});
+
 app.use(session({
     secret: _config.server.secret,
     resave: true,
     saveUninitialized: true,
 }));
+app.use(cors());
 
 // global.database = new db(this);
 // // @ts-ignore
@@ -35,20 +42,26 @@ global.database.posts = database.databaseConnection.import('./db/models/post');
 database.sync();
  */
 
-const db = require('./db/database');
+// const db = require('./db/database');
 // const Logger = require('./util/Logger');
 // @ts-ignore
-global.logger = require('./util/Logger');
+// global.logger = require('./util/Logger');
+// // @ts-ignore
+// global.database = new db(this);
+// // @ts-ignore
+// database.connect()
+// // @ts-ignore
+// global.database.users = database.databaseConnection.import('./db/models/user');
+// // @ts-ignore
+// global.database.posts = database.databaseConnection.import('./db/models/post');
+// // @ts-ignore
+// database.sync();
+
+const db = require('./db/postgres');
 // @ts-ignore
 global.database = new db(this);
 // @ts-ignore
-database.connect()
-// @ts-ignore
-global.database.users = database.databaseConnection.import('./db/models/user');
-// @ts-ignore
-global.database.posts = database.databaseConnection.import('./db/models/post');
-// @ts-ignore
-database.sync();
+database.connect();
 
 routes(app);
 
