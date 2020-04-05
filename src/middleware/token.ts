@@ -1,4 +1,4 @@
-import jwt from 'json-web-token';
+import jwt from 'jsonwebtoken';
 
 export default async function required(req, res, next) {
     let token;
@@ -13,9 +13,10 @@ export default async function required(req, res, next) {
             token = req.headers["authorization"].split("Bearer ")[1];
         else if (req.headers["authorization"].includes("Bot "))
             token = req.headers["authorization"].split("Bot ")[1];
-        await jwt.decode(token, process.env.jwt_secret as string, (err, user) => {
+        await jwt.verify(token, process.env.jwt_secret as string, (err, data) => {
             if(err) return res.status(401).json({ message: 'Unable to authenticate due to token being invalid.', error: 401, ok: false });
-            req.user = user;
+            // @ts-ignore
+            req.user = data;
             next();
         });
     }
