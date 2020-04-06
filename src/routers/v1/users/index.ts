@@ -33,10 +33,26 @@ router.post('/posts/new', token, async (req, res) => {
     if(!attachments) attachments = [];
     if(!content || content.length < 1) return res.status(400).json({ error: 'No content was provided' });
     // @ts-ignore
-    await database.client.query('INSERT INTO posts(id, author, content, attachments, created_at) VALUES($1, $2, $3, $4, $5)', 
+    await database.client.query('INSERT INTO posts(id, author, content, attachments, likes, created_at) VALUES($1, $2, $3, $4, $5, $6)', 
     // @ts-ignore
-    [v1(), req.user.payload.id, content, attachments, new Date()])
-    .catch(err => console.error(err)).then(res.status(400));
+    [v1(), req.user.payload.id, content, attachments, [], new Date()])
+    .catch(err => console.error(err))
+    .then(res.status(400));
+});
+
+router.delete('/posts/:id', token, async (req, res) => {
+    try {
+        // @ts-ignore
+        let post = await database.client.query('SELECT * FROM posts WHERE id = $1', [req.params.id]).then(re => re.rows[0]);
+        if(!post) return res.status(400).json({ success: false, error: 'Unable to delete that post' });
+        res.status(200).json({ success: true, message: 'Post was successfully deleted' });
+        // @ts-ignore
+        await database.client.query('DELETE FROM posts WHERE id = $1', [req.params.id])
+        .catch(err => console.error(err))
+        .then(res.status(400));
+    } catch(err) {
+        return res.status(400).json({ error: 'Unable to delete that post' })
+    }
 });
 
 export default router;
