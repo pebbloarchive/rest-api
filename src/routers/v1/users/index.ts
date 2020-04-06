@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import token from '../../../middleware/token';
+import { v1 } from 'uuid';
 
 const router = Router();
 
@@ -21,9 +22,21 @@ router.get('/@me', token, async (req, res) => {
                is_private: re.rows[0].is_private, 
             });
         } catch(err) {
-            return res.status(400).json({ error: 'Unable to retrieve user data, something went wrong.', err: err.stack });
+            return res.status(400).json({ error: 'Unable to retrieve user data, something went wrong.' });
         }
     }).catch(err => console.error(err)).then(res.status(400));
+});
+
+router.post('/posts/new', token, async (req, res) => {
+    let { content, attachments } = req.body;
+    res.status(200).json({ success: true, message: 'New post was created successfully' });
+    if(!attachments) attachments = [];
+    if(!content || content.length < 1) return res.status(400).json({ error: 'No content was provided' });
+    // @ts-ignore
+    await database.client.query('INSERT INTO posts(id, author, content, attachments, created_at) VALUES($1, $2, $3, $4, $5)', 
+    // @ts-ignore
+    [v1(), req.user.payload.id, content, attachments, new Date()])
+    .catch(err => console.error(err)).then(res.status(400));
 });
 
 export default router;
