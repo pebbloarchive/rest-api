@@ -92,7 +92,7 @@ router.post('/register', async (req, res,  next) => {
       const payload = {
           iat: Math.floor(new Date().setMinutes(new Date().getMinutes() + 10)/1000|0)
       }
-      await jwt.sign({ payload }, process.env.jwt_secret as string, { algorithm: 'HS256' }, (err, token) => {
+      await jwt.sign({ payload }, process.env.jwt_secret as string, { algorithm: 'HS256' }, async (err, token) => {
           if(err) return res.status(400).json({ err: err });
           res.status(200).json({ message: 'Successfully registered, you have been sent an email to verify.', ok: true });
           // @ts-ignore
