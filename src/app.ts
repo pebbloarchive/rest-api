@@ -39,6 +39,13 @@ global.database = new db(this);
 database.connect(); 
 
 /**
+ * Minio Client
+ */
+const minio = require('./middleware/minio');
+// @ts-ignore
+global.minio = new minio(this);
+
+/**
  * Routers
  */
 app.use('/v1', v1);
