@@ -34,7 +34,7 @@ app.all('*', (req, res, next) => {
  */
 const db = require('./postgres');
 // @ts-ignore
-global.database = new db(this);
+global.database = new db();
 // @ts-ignore
 database.connect(); 
 
@@ -43,7 +43,7 @@ database.connect();
  */
 const minio = require('./middleware/minio');
 // @ts-ignore
-global.minio = new minio(this);
+global.minio = new minio();
 
 /**
  * Routers
