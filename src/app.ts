@@ -1,9 +1,11 @@
 import express from 'express';
 import { json, urlencoded } from 'body-parser';
 import cors from 'cors';
-import { config } from "dotenv"
 import { resolve } from 'path';
-config({ path: resolve(__dirname, '../.env') });
+if (process.env.NODE_ENV !== 'production') {
+  const { config } = require("dotenv")
+  config({ path: resolve(__dirname, '../.env') });
+}
 
 import v1 from './routers/v1';
 
