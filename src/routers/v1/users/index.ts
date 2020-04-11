@@ -29,15 +29,17 @@ router.get('/@me', token, async (req, res) => {
 
 router.post('/posts/new', token, async (req, res) => {
     let { content, attachments } = req.body;
-    res.status(200).json({ success: true, message: 'New post was created successfully' });
     if(!attachments) attachments = [];
     if(!content || content.length < 1) return res.status(400).json({ error: 'No content was provided' });
-    // @ts-ignore
-    await database.client.query('INSERT INTO posts(id, author, content, attachments, likes, created_at) VALUES($1, $2, $3, $4, $5, $6)', 
-    // @ts-ignore
-    [v1(), req.user.payload.id, content, attachments, [], new Date()])
-    .catch(err => console.error(err))
-    .then(res.status(400));
+    try {
+        // @ts-ignore
+        await database.client.query('INSERT INTO posts(id, author, content, attachments, likes, created_at) VALUES($1, $2, $3, $4, $5, $6)',  [v1(), req.user.payload.id, content, attachments, [], new Date()])
+        .catch(err => console.error(err))
+        .then(res.status(400));
+        return res.status(200).json({ success: true, message: 'New post was created successfully' });
+    } catch(err) {
+        return res.status(400).json({ error: 'Unable to create new post' });
+    }
 });
 
 router.delete('/posts/:id', token, async (req, res) => {
@@ -51,7 +53,23 @@ router.delete('/posts/:id', token, async (req, res) => {
         .catch(err => console.error(err))
         .then(res.status(400));
     } catch(err) {
-        return res.status(400).json({ error: 'Unable to delete that post' })
+        return res.status(400).json({ error: 'Unable to delete that post' });
+    }
+});
+
+router.get('/posts/:id', token, async (req, res) => {
+    try {
+        // @ts-ignore
+        await database.client.query('SELECT * FROM posts WHERE id = $1', [req.params.id]).then(post => res.status(200).json({
+            id: post.rows[0].id,
+            author: post.rows[0].author,
+            content: post.rows[0].content,
+            attachments: post.rows[0].attachments,
+            likes: post.rows[0].likes.length,
+            created_at: post.rows[0].created_at
+         }))
+    } catch(err) {
+        return res.status(400).json({ error: 'Unable to retrieve post information' });
     }
 });
 

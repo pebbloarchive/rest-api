@@ -3,7 +3,7 @@ import { json, urlencoded } from 'body-parser';
 import cors from 'cors';
 import { resolve } from 'path';
 if (process.env.NODE_ENV !== 'production') {
-  const { config } = require("dotenv")
+  const { config } = require('dotenv')
   config({ path: resolve(__dirname, '../.env') });
 }
 
@@ -13,10 +13,15 @@ const app = express();
 
 const port = 3000;
 
+const corsOption = {
+  origin: ['http://localhost:1500', 'https://pebblo.org', 'https://dev.pebblo.org'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+}
+
 /**
  * Middlewares
  */
-app.use(cors());
+app.use(cors(corsOption));
 app.use(json());
 app.use(urlencoded({ extended: true }));
 
