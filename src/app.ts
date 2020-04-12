@@ -25,17 +25,6 @@ app.use(cors(corsOption));
 app.use(json());
 app.use(urlencoded({ extended: true }));
 
-app.all('*', (req, res, next) => {
-  console.log(
-    'Caught a request',
-    'Headers:',
-    req.headers,
-    'Body:',
-    req.body
-  )
-  next();
-})
-
 /**
  * Database
  */
