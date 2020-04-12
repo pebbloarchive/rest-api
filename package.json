@@ -35,8 +35,6 @@
   },
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc",
-    "clean": "rm -fr build",
-    "lint": "eslint src --ext .ts --fix"
+    "build": "tsc"
   }
 }
