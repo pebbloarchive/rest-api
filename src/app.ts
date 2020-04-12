@@ -19,11 +19,17 @@ const corsOption = {
 }
 
 /**
+ * Middlewares/utils imports
+ */
+import minio from './middleware/minio';
+
+/**
  * Middlewares
  */
 app.use(cors(corsOption));
 app.use(json());
 app.use(urlencoded({ extended: true }));
+app.use(minio);
 
 /**
  * Database
