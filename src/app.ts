@@ -48,9 +48,9 @@ database.connect();
 /**
  * Minio Client
  */
-const minio = require('./middleware/minio');
+// const minio = require('./middleware/minio');
 // @ts-ignore
-global.minio = new minio();
+// global.minio = new minio();
 
 /**
  * Routers
