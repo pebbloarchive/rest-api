@@ -26,7 +26,7 @@ import minio from './middleware/minio';
 /**
  * Middlewares
  */
-app.use(cors(corsOption));
+app.use(cors()); // cors are breaking right now or some shit https://quak.ovh/21DfwYW.png
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(minio);
