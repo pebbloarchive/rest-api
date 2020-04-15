@@ -99,7 +99,7 @@ router.post('/register', async (req, res,  next) => {
           await database.client.query('INSERT INTO users(id, email, password, username, created_at, email_code) VALUES($1, $2, $3, $4, $5, $6)',[v4(), email, userPassword, username, new Date(), token])
           .catch((err: any) => console.error(err)).then(res.status(400).json({ error: 'It seems something went wrong' }));
       });
-  });
+  }).catch((err: any) => (res.status(500).send(err)))
 });
 
 export default router;
