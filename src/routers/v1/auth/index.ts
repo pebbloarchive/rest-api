@@ -94,10 +94,14 @@ router.post('/register', async (req, res,  next) => {
       }
       await jwt.sign({ payload }, process.env.jwt_secret as string, { algorithm: 'HS256' }, async (err, token) => {
           if(err) return res.status(400).json({ err: err });
-          res.status(200).json({ message: 'Successfully registered, you have been sent an email to verify.', ok: true });
           // @ts-ignore
           await database.client.query('INSERT INTO users(id, email, password, username, created_at, email_code) VALUES($1, $2, $3, $4, $5, $6)',[v4(), email, userPassword, username, new Date(), token])
-          .catch((err: any) => console.error(err)).then(res.status(400).json({ error: 'It seems something went wrong' }));
+          .catch((err: any) => {
+            console.error(err)
+            return res.status(400).json({ error: 'It seems something went wrong' })
+          }).then(() => {
+            return res.status(200).json({ message: 'Successfully registered, you have been sent an email to verify.', ok: true });
+          });
       });
   }).catch((err: any) => (res.status(500).send(err)))
 });
