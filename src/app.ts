@@ -2,6 +2,7 @@ import express from 'express';
 import { json, urlencoded } from 'body-parser';
 import cors from 'cors';
 import { resolve } from 'path';
+import { initEventManager } from './eventManager';
 if (process.env.NODE_ENV !== 'production') {
   const { config } = require('dotenv')
   config({ path: resolve(__dirname, '../.env') });
@@ -13,11 +14,6 @@ const app = express();
 
 const port = 3000;
 
-const corsOption = {
-  origin: ['http://localhost:1500', 'https://pebblo.org', 'https://dev.pebblo.org'],
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
-}
-
 /**
  * Middlewares/utils imports
  */
@@ -26,10 +22,22 @@ import minio from './middleware/minio';
 /**
  * Middlewares
  */
-app.use(cors()); // cors are breaking right now or some shit https://quak.ovh/21DfwYW.png
-app.use(json());
-app.use(urlencoded({ extended: true }));
-app.use(minio);
+const start: Function = async () => {
+  try {
+    const manager = await initEventManager();
+    app.use(cors());
+    app.use(json());
+    app.use(urlencoded({ extended: true }));
+    app.use(minio);
+    app.use('/v1', v1);
+    app.listen(port, () => {
+      console.log(`API Running on port ${port}. Sponsored by DogShitKyley69`);
+    });
+  } catch (error) {
+    console.log(error);
+    process.exit();
+  }
+}
 
 /**
  * Database
@@ -95,20 +103,4 @@ const checkTables = async () => {
 }
 
 checkTables();
-
-
-/**
- * Minio Client
- */
-// const minio = require('./middleware/minio');
-// @ts-ignore
-// global.minio = new minio();
-
-/**
- * Routers
- */
-app.use('/v1', v1);
-
-app.listen(port, () => {
-  console.log(`API Running on port ${port}`)
-});
+start();

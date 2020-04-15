@@ -44,7 +44,7 @@ deploy_dev:
     - ssh pebbloci@$AZURE_PROD_IP "docker stop $CONTAINER_NAME" || true
     - ssh pebbloci@$AZURE_PROD_IP "docker rm $CONTAINER_NAME" || true
     # start new container
-    - ssh pebbloci@$AZURE_PROD_IP "docker run --restart unless-stopped --name $CONTAINER_NAME -e NODE_ENV=production -e db_host=$DATABASE_IP -e db_name=$DATABASE_NAME -e db_pass=$DATABASE_PASSWORD -e db_user=$DATABASE_USER -e jwt_secret=$JWT_TOKENSECRET -e MINIO_ENDPOINT=$EUW_MINIO_IP -e MINIO_ACCESSKEY=$EUW_MINIO_ACCESS -e MINIO_SECRETKEY=$EUW_MINIO_SECRET -p $APP_EXTERNAL_PORT:$APP_INTERNAL_PORT -d registry.pebblo.org/$APP_NAME:${CI_COMMIT_REF_SLUG}"  
+    - ssh pebbloci@$AZURE_PROD_IP "docker run --restart unless-stopped --name $CONTAINER_NAME -e NODE_ENV=production -e RABBITMQ_URI=$DEV_RABBITMQ_URI -e db_host=$DATABASE_IP -e db_name=$DATABASE_NAME -e db_pass=$DATABASE_PASSWORD -e db_user=$DATABASE_USER -e jwt_secret=$JWT_TOKENSECRET -e MINIO_ENDPOINT=$EUW_MINIO_IP -e MINIO_ACCESSKEY=$EUW_MINIO_ACCESS -e MINIO_SECRETKEY=$EUW_MINIO_SECRET -p $APP_EXTERNAL_PORT:$APP_INTERNAL_PORT -d registry.pebblo.org/$APP_NAME:${CI_COMMIT_REF_SLUG}"  
   only:
     - develop
 
