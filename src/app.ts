@@ -33,7 +33,7 @@ const start: Function = async () => {
     app.use('/v1', v1);
     app.use('/v2', v2);
     app.listen(port, () => {
-      console.log(`API Running on port ${port}. Sponsored by DogShitKyley69`);
+      console.log(`API Running on port ${port}. Sponsored by https://itsrems.com cuz he fixes all of the code.`);
     });
   } catch (error) {
     console.log(error);
