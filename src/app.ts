@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 import v1 from './routers/v1';
+import v2 from './routers/v2';
 
 const app = express();
 
@@ -30,6 +31,7 @@ const start: Function = async () => {
     app.use(urlencoded({ extended: true }));
     app.use(minio);
     app.use('/v1', v1);
+    app.use('/v2', v2);
     app.listen(port, () => {
       console.log(`API Running on port ${port}. Sponsored by DogShitKyley69`);
     });
