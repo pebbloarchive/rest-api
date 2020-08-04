@@ -1,10 +1,7 @@
-const { Client } = require('pg')
-
-interface Database {
-    client: void;
-}
+import { Client } from 'pg';
 
 class Database {
+    public client: Client;
     constructor() {
         this.client = new Client({
             user: process.env.db_user,
@@ -14,6 +11,7 @@ class Database {
             port: 5432
         });
     }
+
     connect() {
         try {
             // @ts-ignore
@@ -22,6 +20,10 @@ class Database {
         } catch(err) {
             return console.log(`Unable to connect to the databse ${err}`);
         }
+    }
+
+    query<T = any>(sql: string, values?: any[]) {
+        return this.client.query<T>(sql, values);
     }
 }
 
