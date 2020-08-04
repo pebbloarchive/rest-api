@@ -1,20 +1,27 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
-import { ObjectType, Field, Int } from 'type-graphql'
+import { ObjectType, Field } from 'type-graphql'
+import { Length, Matches } from 'class-validator';
+import { EMAIL_REGEX, USERNAME_REGEX, PASSWORD_REGEX } from '../constants';
 
 @ObjectType()
 @Entity('users')
 export class User extends BaseEntity {
-  @Field(() => Int)
+  @Field(() => String)
   @PrimaryGeneratedColumn()
-  id: number
+  id: string;
 
   @Field()
   @Column()
-  email: string
+  @Matches(EMAIL_REGEX)
+  email: string;
+
+  @Field()
+  @Column('text')
+  @Length(3, 20)
+  @Matches(USERNAME_REGEX)
+  username: string;
 
   @Column('text', { nullable: false })
-  password: string
-
-  @Column('int', { default: 0 })
-  tokenVersion: number
+  @Matches(PASSWORD_REGEX)
+  password: string;
 }
