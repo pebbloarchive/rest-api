@@ -1,5 +1,6 @@
 import { Resolver, Query, Mutation, Arg, ObjectType, Field, Ctx, UseMiddleware, Int } from 'type-graphql'
-import { User } from 'src/entity/User'
+import { User } from '../entity/User'
+import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
 
 @Resolver()
@@ -16,8 +17,15 @@ export class UserResolver {
     @Arg('password', () => String) password: string
   ) {
     const hashed = await bcrypt.hash(password, 10);
+    const user = await User.findOne({ where: { username } });
+    const userEmail = await User.findOne({ where: { email } });
+
+    if(user) throw new Error('A user with that username or email already exists');
+    if(userEmail) throw new Error('A user with that username or email already exists');
+
     try {
       await User.insert({
+        _id: uuid(),
         email,
         username,
         password: hashed
@@ -28,5 +36,4 @@ export class UserResolver {
     }
     return true
   }
-
 }
